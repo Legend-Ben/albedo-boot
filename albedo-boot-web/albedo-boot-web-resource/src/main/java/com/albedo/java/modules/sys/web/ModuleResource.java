@@ -14,6 +14,8 @@ import com.albedo.java.util.domain.Globals;
 import com.albedo.java.util.domain.PageModel;
 import com.albedo.java.util.exception.RuntimeMsgException;
 import com.albedo.java.vo.sys.ModuleVo;
+import com.albedo.java.vo.sys.query.ModuleTreeQuery;
+import com.albedo.java.vo.sys.query.TreeResult;
 import com.albedo.java.web.rest.ResultBuilder;
 import com.albedo.java.web.rest.base.TreeVoResource;
 import com.alibaba.fastjson.JSON;
@@ -26,7 +28,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * REST controller for managing Station.
@@ -65,6 +69,19 @@ public class ModuleResource extends TreeVoResource<ModuleService, ModuleVo> {
         }
         return ResultBuilder.buildOk(moduleVo);
     }
+
+    @GetMapping(value = "/findTreeData")
+    @Timed
+    public ResponseEntity findTreeData(@RequestParam(required = false) String type, @RequestParam(required = false) String all, HttpServletResponse response) {
+        ModuleTreeQuery moduleTreeQuery = new ModuleTreeQuery();
+        moduleTreeQuery.setType(type);
+        moduleTreeQuery.setAll(all);
+
+        List<TreeResult> treeResults =  this.service.findTreeData(moduleTreeQuery,SecurityUtil.getModuleList());
+        return ResultBuilder.buildOk(treeResults);
+    }
+
+
     /**
      * @param moduleVo
      * @return

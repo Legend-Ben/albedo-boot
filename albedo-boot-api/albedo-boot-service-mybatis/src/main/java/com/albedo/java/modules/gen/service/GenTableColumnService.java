@@ -21,7 +21,7 @@ public class GenTableColumnService extends
     DataVoService<GenTableColumnRepository, GenTableColumn, String, GenTableColumnVo> {
 
     List<GenTableColumn> findAllByGenTableIdOrderBySort(String id){
-        return selectList(Condition.create().eq(GenTableColumn.F_GENTABLEID,id)
+        return repository.selectList(Condition.create().eq(GenTableColumn.F_SQL_GENTABLEID,id)
             .orderBy(GenTableColumn.F_SORT));
     }
 
